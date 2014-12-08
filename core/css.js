@@ -71,7 +71,15 @@ Blockly.Css.inject = function() {
   // Strip off any trailing slash (either Unix or Windows).
   Blockly.Css.mediaPath_ = Blockly.pathToMedia.replace(/[\\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
-  Blockly.Css.styleSheet_ = goog.cssom.addCssText(text).sheet;
+  if (Blockly.shadowRoot == undefined) {
+    Blockly.Css.styleSheet_ = goog.cssom.addCssText(text).sheet;
+  }
+  else {
+    text = '<style>' + text + '</style>';
+    var node = goog.dom.htmlToDocumentFragment(text);
+    goog.dom.append(Blockly.shadowRoot, node);
+    Blockly.Css.styleSheet_ = node.sheet;
+  }
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
 };
 

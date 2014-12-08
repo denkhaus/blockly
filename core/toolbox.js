@@ -230,7 +230,13 @@ Blockly.Toolbox.prototype.getRect = function() {
  */
 Blockly.Toolbox.TreeControl = function(toolbox, config) {
   this.toolbox_ = toolbox;
-  goog.ui.tree.TreeControl.call(this, goog.html.SafeHtml.EMPTY, config);
+
+  var domhelper = undefined;
+  if (Blockly.shadowRoot !== undefined) {
+    domhelper = new goog.dom.DomHelper(Blockly.shadowRoot);
+  }
+
+  goog.ui.tree.TreeControl.call(this, goog.html.SafeHtml.EMPTY, config, domhelper);
 };
 goog.inherits(Blockly.Toolbox.TreeControl, goog.ui.tree.TreeControl);
 

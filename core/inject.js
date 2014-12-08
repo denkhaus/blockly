@@ -37,12 +37,13 @@ goog.require('goog.dom');
  * @param {Object} opt_options Optional dictionary of options.
  */
 Blockly.inject = function(container, opt_options) {
-  // Verify that the container is in document.
-  if (!goog.dom.contains(document, container)) {
-    throw 'Error: container is not in current document.';
-  }
   if (opt_options) {
     Blockly.parseOptions_(opt_options);
+  }
+  // Verify that the container is either in the document or else in the shadowRoot
+  // that was passed as an option
+  if (!goog.dom.contains(Blockly.shadowRoot || document, container)) {
+    throw 'Error: container is neither in current document nor in webcomponent.';
   }
   var startUi = function() {
     Blockly.createDom_(container);
@@ -148,6 +149,7 @@ Blockly.parseOptions_ = function(options) {
   Blockly.languageTree = tree;
   Blockly.enableRealtime = enableRealtime;
   Blockly.realtimeOptions = realtimeOptions;
+  Blockly.shadowRoot = options['shadowRoot'];
 };
 
 /**
@@ -343,7 +345,7 @@ Blockly.createDom_ = function(container) {
   // Create an HTML container for popup overlays (e.g. editor widgets).
   Blockly.WidgetDiv.DIV = goog.dom.createDom('div', 'blocklyWidgetDiv');
   Blockly.WidgetDiv.DIV.style.direction = Blockly.RTL ? 'rtl' : 'ltr';
-  document.body.appendChild(Blockly.WidgetDiv.DIV);
+  container.appendChild(Blockly.WidgetDiv.DIV);
 };
 
 
