@@ -1,0 +1,36 @@
+<link rel="import" href="components/polymer/polymer.html">
+<link rel="import" href="blockly-import.html">
+
+<polymer-element name="blockly-control" attributes="toolbox">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+      #main {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <div id="main"></div>
+    <xml id="default_toolbox" style="display: none">
+      <block type="controls_if"></block>
+      <block type="controls_repeat_ext"></block>
+      <block type="logic_compare"></block>
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="text"></block>
+      <block type="text_print"></block>
+    </xml>
+ </template>
+  <script>
+    Polymer('blockly-control', {
+      ready: function() {
+	this.shadowRoot.__proto__.createElement = function(el) { return document.createElement(el); }
+	var tb = (this.toolbox) ? document.getElementById(this.toolbox) : this.$.default_toolbox;
+        Blockly.inject(this.$.main, {toolbox: tb, shadowRoot: this.shadowRoot});
+      },
+    });
+  </script>
+</polymer-element>
